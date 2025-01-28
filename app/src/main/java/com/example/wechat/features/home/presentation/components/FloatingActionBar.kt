@@ -12,8 +12,8 @@ import com.example.wechat.ui.theme.Tertiary
 import com.example.wechat.ui.theme.WeChatTheme
 
 @Composable
-fun FloatingActionBar(){
-    FloatingActionButton(onClick = { /*TODO*/ }, containerColor = Tertiary, contentColor = Primary)
+fun FloatingActionBar(onClick:()->Unit){
+    FloatingActionButton(onClick = onClick , containerColor = Tertiary, contentColor = Primary)
     {
         Icon(imageVector = Icons.Default.Add, contentDescription = "New Chat")
     }
@@ -23,6 +23,6 @@ fun FloatingActionBar(){
 @Composable
 fun FloatingActionPreview(){
     WeChatTheme {
-        FloatingActionBar()
+        FloatingActionBar(onClick = {})
     }
 }

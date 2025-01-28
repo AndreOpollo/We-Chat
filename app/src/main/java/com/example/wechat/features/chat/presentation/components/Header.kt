@@ -1,13 +1,11 @@
-package com.example.wechat.features.home.presentation.components
+package com.example.wechat.features.chat.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
@@ -27,75 +25,51 @@ import coil.request.ImageRequest
 import coil.size.Size
 import com.example.wechat.features.home.presentation.util.Story
 import com.example.wechat.ui.theme.DMSansMedium
-import com.example.wechat.ui.theme.DMSansRegular
 
 @Composable
-fun ChatListItem(
-    modifier: Modifier = Modifier,
-    story: Story){
-    val imageState = rememberAsyncImagePainter(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(story.profile)
-            .size(Size.ORIGINAL)
-            .build()).state
+fun Header(modifier:Modifier = Modifier,story: Story){
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 12.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ){
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ){
+        val imageState = rememberAsyncImagePainter(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(story.profile)
+                .size(Size.ORIGINAL)
+                .build()).state
         Box(
             modifier = Modifier
-                .size(60.dp)
+                .size(50.dp)
                 .clip(CircleShape)
-                .background(Color.LightGray),
+                .background(Color.Gray),
             contentAlignment = Alignment.Center
         ){
             when(imageState){
                 AsyncImagePainter.State.Empty -> TODO()
                 is AsyncImagePainter.State.Error -> {
-                    Text("Image failed to load")
+                    Text("Failed to load Image")
                 }
                 is AsyncImagePainter.State.Loading -> {
                     CircularProgressIndicator(
-                        modifier = Modifier.size(20.dp),
+                        modifier=Modifier.size(20.dp),
                         strokeWidth = 2.dp)
                 }
                 is AsyncImagePainter.State.Success -> {
                     Image(
                         modifier = Modifier
-                            .size(55.dp)
+                            .size(45.dp)
                             .clip(CircleShape),
                         contentScale = ContentScale.Crop,
                         painter = imageState.painter,
-                        contentDescription = "chat profile")
+                        contentDescription = "profile")
                 }
             }
 
-         }
-            Column(){
-                Text(text = story.name,
-                    fontFamily = DMSansMedium,
-                    fontSize = 15.sp)
-                Text(text = story.message!!,
-                    fontFamily = DMSansRegular,
-                    fontSize = 13.sp,
-                    color = Color.Gray)
-            }
-
         }
-
-        Text("02:11",
-            fontFamily = DMSansRegular,
-            fontSize = 12.sp,
-            color = Color.Gray)
-
+        Text(
+            story.name,
+            fontFamily = DMSansMedium,
+            fontSize = 16.sp)
     }
-
 }
