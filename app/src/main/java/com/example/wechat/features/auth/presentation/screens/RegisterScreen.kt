@@ -6,12 +6,20 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
@@ -36,10 +44,18 @@ import com.example.wechat.ui.theme.WeChatTheme
 
 @Composable
 fun RegisterScreen(modifier: Modifier = Modifier){
+    val scrollState = rememberScrollState()
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(top = 24.dp, start = 4.dp, end = 4.dp),
+            .padding(
+                top = 24.dp,
+                start = 4.dp,
+                end = 4.dp,
+            )
+            .imePadding()
+            .systemBarsPadding()
+            .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
     ){
         Box(
@@ -116,7 +132,9 @@ fun RegisterScreen(modifier: Modifier = Modifier){
             Text("Already Have an Account?")
             Spacer(modifier = Modifier.width(4.dp))
             Text("Login", color = Tertiary, fontFamily = DMSansBold)
+            WindowInsets.ime.asPaddingValues()
         }
+
     }
 
 }
