@@ -8,7 +8,7 @@ import com.example.wechat.features.home.presentation.screens.HomeScreen
 
 @Composable
 fun AppNavigation(){
-  val navController = rememberNavController()
+    val navController = rememberNavController()
 
     NavHost(
         navController = navController,
