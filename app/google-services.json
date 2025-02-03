@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "155676807408",
+    "project_id": "chat-app-e8965",
+    "storage_bucket": "chat-app-e8965.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:155676807408:android:6d72c63bb21203a2143235",
+        "android_client_info": {
+          "package_name": "com.example.wechat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCa_WKR6CtfcOfQAS9ynhkiVs_5TswzX60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
