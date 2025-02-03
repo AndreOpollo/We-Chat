@@ -17,10 +17,17 @@ fun AppNavigation(){
         navController = navController,
         startDestination = Screens.RegisterScreen.route ) {
         composable(Screens.LoginScreen.route){
-            LoginScreen()
+            LoginScreen(onRegisterClicked = {
+                navController.popBackStack()
+            },
+                onSuccess = {
+                    navController.navigate(Screens.HomeScreen.route)
+                })
         }
         composable(Screens.RegisterScreen.route){
-            RegisterScreen()
+            RegisterScreen(onLoginClicked = {
+                navController.navigate(Screens.LoginScreen.route)
+            })
         }
         composable(Screens.HomeScreen.route){
             HomeScreen(onClick = {navController.navigate(Screens.ChatRoomScreen.route)})
