@@ -1,5 +1,6 @@
 package com.example.wechat.features.home.presentation.screens
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.List
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.rounded.List
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -25,34 +27,42 @@ import androidx.compose.ui.Modifier
 import com.example.wechat.features.home.presentation.components.FloatingActionBar
 import com.example.wechat.features.home.presentation.components.TopBar
 import androidx.compose.material3.IconButton
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.wechat.features.home.presentation.components.ChatListItem
 import com.example.wechat.features.home.presentation.components.StoryListItem
 import com.example.wechat.features.home.presentation.util.chatList
 import com.example.wechat.features.home.presentation.util.storyList
+import com.example.wechat.features.home.presentation.viewmodel.HomeViewModel
 import com.example.wechat.ui.theme.DMSansBold
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
     modifier:Modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
     onClick:()->Unit){
+    val homeViewModel:HomeViewModel = koinViewModel()
+    val homeUiState by homeViewModel.homeUiState.collectAsStateWithLifecycle()
     Scaffold(
         topBar = { TopBar()},
         content = {paddingValues ->
             Column(
                 modifier = modifier.padding(paddingValues)
             ){
-                LazyRow(){
-//                    item{
-//                        IconButton(onClick = { /*TODO*/ }) {
-//                            Icon(imageVector = Icons.Default.Add, contentDescription = "Add Story" )
-//                        }
-//                    }
-                    items(storyList){story->
-                        StoryListItem(story = story)
+                AnimatedVisibility(visible = homeUiState.isLoading) {
+                    CircularProgressIndicator()
+                }
+                AnimatedVisibility(visible = homeUiState.users.isNotEmpty()) {
+                    LazyRow(){
+
+                        items(homeUiState.users){user->
+                            StoryListItem(user= user)
+                        }
                     }
+
                 }
                 Spacer(modifier = Modifier.height(16.dp) )
                 Row(
@@ -70,6 +80,7 @@ fun HomeScreen(
                             contentDescription = "More")
                     }
                 }
+
                 LazyColumn(
                     modifier = Modifier.padding(end = 3.dp)
                 ){

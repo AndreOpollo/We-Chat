@@ -26,14 +26,15 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
+import com.example.wechat.features.auth.data.models.User
 import com.example.wechat.features.home.presentation.util.Story
 import com.example.wechat.ui.theme.DMSansMedium
 
 @Composable
-fun StoryListItem(modifier:Modifier = Modifier,story: Story){
+fun StoryListItem(modifier:Modifier = Modifier,user: User){
      val imageState = rememberAsyncImagePainter(
          model = ImageRequest.Builder(LocalContext.current)
-             .data(story.profile)
+             .data(user.photoUrl)
              .size(Size.ORIGINAL)
              .build()
      ).state
@@ -71,7 +72,7 @@ fun StoryListItem(modifier:Modifier = Modifier,story: Story){
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             fontFamily = DMSansMedium,
-            text = story.name,
+            text = user.username,
             fontSize = 13.sp
         )
 
