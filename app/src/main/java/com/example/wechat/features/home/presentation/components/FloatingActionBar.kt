@@ -13,7 +13,7 @@ import com.example.wechat.ui.theme.WeChatTheme
 
 @Composable
 fun FloatingActionBar(onClick:()->Unit){
-    FloatingActionButton(onClick = onClick , containerColor = Tertiary, contentColor = Primary)
+    FloatingActionButton(onClick = onClick, containerColor = Tertiary, contentColor = Primary)
     {
         Icon(imageVector = Icons.Default.Add, contentDescription = "New Chat")
     }

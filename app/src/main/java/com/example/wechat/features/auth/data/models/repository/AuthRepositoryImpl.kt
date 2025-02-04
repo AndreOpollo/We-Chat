@@ -6,12 +6,18 @@ import com.example.wechat.util.Result
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
 
 class AuthRepositoryImpl(
     private val firebaseAuth: FirebaseAuth,
     private val firebaseFirestore: FirebaseFirestore
 ):AuthRepository{
+    private val _isLoggedIn = MutableStateFlow(firebaseAuth.currentUser!=null)
+    override val isLoggedIn: StateFlow<Boolean>
+        get() = _isLoggedIn
+
     override suspend fun createUser(
         email: String,
         username: String,
@@ -29,10 +35,15 @@ class AuthRepositoryImpl(
                 email = email,
                 createdAt = System.currentTimeMillis().toString()
             )
-            firebaseFirestore.collection("users").document(firebaseUser.uid).set(user).await()
+            firebaseFirestore.collection("users")
+                .document(firebaseUser.uid)
+                .set(user)
+                .await()
+            _isLoggedIn.value = true
             Result.Success(user)
 
         }catch (e:Exception){
+            _isLoggedIn.value = false
             Result.Failure("Error creating user: ${e.message}")
 
         }
@@ -49,10 +60,25 @@ class AuthRepositoryImpl(
                 .get()
                 .await()
             val user = snapshot.toObject(User::class.java)?:return Result.Failure("User not found")
+            _isLoggedIn.value = true
             Result.Success(user)
 
         }catch (e:Exception){
+            _isLoggedIn.value = false
             Result.Failure("Error message: ${e.message}")
+        }
+    }
+
+    override suspend fun logout():Result<Unit> {
+        return try {
+            firebaseAuth.signOut()
+            _isLoggedIn.value = false
+                Result.Success(Unit)
+
+
+        }catch (e:Exception){
+            Result.Failure("Error occurred: ${e.message}")
+
         }
     }
 }

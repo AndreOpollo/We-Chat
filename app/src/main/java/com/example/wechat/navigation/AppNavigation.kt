@@ -30,7 +30,10 @@ fun AppNavigation(){
             })
         }
         composable(Screens.HomeScreen.route){
-            HomeScreen(onClick = {navController.navigate(Screens.ChatRoomScreen.route)})
+            HomeScreen(onSuccessLogout = {
+                navController.popBackStack()
+            })
+
         }
         composable(Screens.ChatRoomScreen.route){
             ChatRoomScreen()

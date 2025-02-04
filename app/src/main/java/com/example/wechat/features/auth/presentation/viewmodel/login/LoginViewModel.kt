@@ -11,8 +11,10 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
     private val authRepository: AuthRepository
 ):ViewModel(){
+    val isLoggedIn = authRepository.isLoggedIn
     private val _loginUiState = MutableStateFlow(LoginUiState())
     val loginUiState = _loginUiState
+
 
 
     fun onEvent(e:LoginUiEvent){
@@ -20,6 +22,11 @@ class LoginViewModel(
             is LoginUiEvent.LoginUser -> {
                 loginUser(email = e.email, password = e.password)
             }
+        }
+    }
+    fun clearStates(){
+        _loginUiState.update {
+            it.copy(success = null, error = null)
         }
     }
     private fun loginUser(email:String,password:String){

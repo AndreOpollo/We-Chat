@@ -125,6 +125,7 @@ fun LoginScreen(modifier: Modifier = Modifier
                     color = Tertiary,
                     fontFamily = DMSansBold)
                 onSuccess()
+                loginViewModel.clearStates()
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
