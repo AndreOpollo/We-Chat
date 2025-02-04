@@ -5,17 +5,16 @@ import androidx.lifecycle.viewModelScope
 import com.example.wechat.features.auth.domain.repository.AuthRepository
 import com.example.wechat.util.Result
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val authRepository: AuthRepository
 ):ViewModel(){
-    val isLoggedIn = authRepository.isLoggedIn
     private val _loginUiState = MutableStateFlow(LoginUiState())
-    val loginUiState = _loginUiState
-
-
+    val loginUiState = _loginUiState.asStateFlow()
 
     fun onEvent(e:LoginUiEvent){
         when(e){
@@ -24,31 +23,36 @@ class LoginViewModel(
             }
         }
     }
-    fun clearStates(){
+    fun resetLoginState(){
         _loginUiState.update {
-            it.copy(success = null, error = null)
+            it.copy(error = null, success = null)
         }
     }
+
     private fun loginUser(email:String,password:String){
         _loginUiState.update {
             it.copy(isLoading = true, error = null, success = null)
         }
         viewModelScope.launch {
-            when(val result = authRepository.loginUser(email,password)){
-                is Result.Failure -> {
-                    _loginUiState.update {
-                        it.copy(isLoading = false,
-                            error = result.message)
+            authRepository.loginUser(email,password).collectLatest { result->
+                when(result){
+                    is Result.Failure -> {
+                        _loginUiState.update {
+                            it.copy(isLoading = false, error = result.message)
+                        }
+                    }
+                    Result.Loading -> {
+                        _loginUiState.update {
+                            it.copy(isLoading = true)
+                        }
+                    }
+                    is Result.Success -> {
+                        _loginUiState.update {
+                            it.copy(isLoading = false, success = "Successful login")
+                        }
                     }
                 }
-                is Result.Success -> {
-                    _loginUiState.update {
-                        it.copy(isLoading = false,
-                            success = "Login Successful",
-                            user = result.data
-                        )
-                    }
-                }
+
             }
         }
     }

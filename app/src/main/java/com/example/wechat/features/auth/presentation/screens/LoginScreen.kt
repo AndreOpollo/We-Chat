@@ -26,6 +26,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,6 +49,7 @@ import com.example.wechat.ui.theme.DMSansBold
 import com.example.wechat.ui.theme.Tertiary
 import com.example.wechat.ui.theme.WeChatTheme
 import org.koin.androidx.compose.koinViewModel
+import kotlin.math.log
 
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier
@@ -62,6 +64,12 @@ fun LoginScreen(modifier: Modifier = Modifier
     }
     var password by remember{
         mutableStateOf("")
+    }
+    LaunchedEffect(key1 = loginUiState.success) {
+        if(loginUiState.success!=null){
+            onSuccess()
+            loginViewModel.resetLoginState()
+    }
     }
     Column(
         modifier = modifier
@@ -124,8 +132,6 @@ fun LoginScreen(modifier: Modifier = Modifier
                 Text(loginUiState.success.toString(),
                     color = Tertiary,
                     fontFamily = DMSansBold)
-                onSuccess()
-                loginViewModel.clearStates()
             }
         }
         Spacer(modifier = Modifier.height(8.dp))

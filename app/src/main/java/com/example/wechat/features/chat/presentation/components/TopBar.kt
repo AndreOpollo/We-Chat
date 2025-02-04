@@ -24,20 +24,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.wechat.features.auth.data.models.User
 import com.example.wechat.features.home.presentation.util.Story
 import com.example.wechat.features.home.presentation.util.storyList
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
+fun TopBar(scrollBehavior: TopAppBarScrollBehavior,onBackPressed:()->Unit,user: User) {
     Column {
         TopAppBar(
             title = {
-                Header(story = storyList[0])
+                Header(user = user)
             },
             navigationIcon = {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = onBackPressed) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                         contentDescription = "back"

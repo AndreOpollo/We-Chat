@@ -23,11 +23,12 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
+import com.example.wechat.features.auth.data.models.User
 import com.example.wechat.features.home.presentation.util.Story
 import com.example.wechat.ui.theme.DMSansMedium
 
 @Composable
-fun Header(modifier:Modifier = Modifier,story: Story){
+fun Header(modifier:Modifier = Modifier,user: User){
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -35,7 +36,7 @@ fun Header(modifier:Modifier = Modifier,story: Story){
     ){
         val imageState = rememberAsyncImagePainter(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(story.profile)
+                .data(user.photoUrl)
                 .size(Size.ORIGINAL)
                 .build()).state
         Box(
@@ -68,7 +69,7 @@ fun Header(modifier:Modifier = Modifier,story: Story){
 
         }
         Text(
-            story.name,
+            user.username,
             fontFamily = DMSansMedium,
             fontSize = 16.sp)
     }

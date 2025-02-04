@@ -6,5 +6,6 @@ data class HomeUiState(
     val isLoading:Boolean = false,
     val success:String?=null,
     val error:String?=null,
-    val users:List<User> = emptyList()
+    val users:List<User> = emptyList(),
+    val isLoggedOut:Boolean = false
 )

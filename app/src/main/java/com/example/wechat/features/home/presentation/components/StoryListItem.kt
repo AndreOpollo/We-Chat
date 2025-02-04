@@ -2,6 +2,7 @@ package com.example.wechat.features.home.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,7 +32,9 @@ import com.example.wechat.features.home.presentation.util.Story
 import com.example.wechat.ui.theme.DMSansMedium
 
 @Composable
-fun StoryListItem(modifier:Modifier = Modifier,user: User){
+fun StoryListItem(modifier:Modifier = Modifier,
+                  user: User,
+                  onUserClicked:(User)->Unit){
      val imageState = rememberAsyncImagePainter(
          model = ImageRequest.Builder(LocalContext.current)
              .data(user.photoUrl)
@@ -47,7 +50,10 @@ fun StoryListItem(modifier:Modifier = Modifier,user: User){
             modifier = Modifier
                 .size(60.dp)
                 .clip(CircleShape)
-                .background(Color.LightGray),
+                .background(Color.LightGray)
+                .clickable {
+                    onUserClicked(user)
+                },
             contentAlignment = Alignment.Center){
             when(imageState){
                 AsyncImagePainter.State.Empty -> TODO()

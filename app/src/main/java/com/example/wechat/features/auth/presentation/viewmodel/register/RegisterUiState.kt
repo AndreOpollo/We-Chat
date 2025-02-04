@@ -6,5 +6,4 @@ data class RegisterUiState(
     val isLoading: Boolean = false,
     val error:String?=null,
     val success:String?=null,
-    val user: User? = null
 )

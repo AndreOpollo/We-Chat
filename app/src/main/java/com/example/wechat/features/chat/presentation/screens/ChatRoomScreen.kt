@@ -30,18 +30,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import com.example.wechat.features.auth.data.models.User
 import com.example.wechat.features.chat.presentation.components.TopBar
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatRoomScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBackPressed:()->Unit,
+    user: User
 ){
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     Scaffold(
         modifier = Modifier.imePadding(),
-        topBar = { TopBar(scrollBehavior)},
+        topBar = { TopBar(scrollBehavior,
+            onBackPressed,
+            user)},
         content = {paddingValues->
             Column(modifier = modifier
                 .padding(paddingValues)

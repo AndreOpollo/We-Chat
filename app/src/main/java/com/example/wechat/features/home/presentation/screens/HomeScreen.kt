@@ -34,34 +34,31 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.wechat.features.auth.presentation.viewmodel.logout.LogoutUiEvent
-import com.example.wechat.features.auth.presentation.viewmodel.logout.LogoutViewModel
+import com.example.wechat.features.auth.data.models.User
 import com.example.wechat.features.home.presentation.components.ChatListItem
 import com.example.wechat.features.home.presentation.components.StoryListItem
 import com.example.wechat.features.home.presentation.util.chatList
-import com.example.wechat.features.home.presentation.util.storyList
 import com.example.wechat.features.home.presentation.viewmodel.HomeViewModel
 import com.example.wechat.ui.theme.DMSansBold
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.delay
-import kotlinx.serialization.json.JsonNull.content
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
     modifier:Modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
-    onSuccessLogout:()->Unit){
+    onSuccessLogout:()->Unit,
+    onUserClicked:(User)->Unit){
     val homeViewModel:HomeViewModel = koinViewModel()
     val homeUiState by homeViewModel.homeUiState.collectAsStateWithLifecycle()
-    val logoutViewModel:LogoutViewModel = koinViewModel()
-    val logoutUiState by logoutViewModel.logoutUiState.collectAsStateWithLifecycle()
-    val isLoggedIn by logoutViewModel.isLoggedIn.collectAsStateWithLifecycle()
 
-    LaunchedEffect(isLoggedIn) {
-        Log.d("isLoggedIn State",isLoggedIn.toString())
-        Log.d("Auth State",FirebaseAuth.getInstance().toString())
+
+    LaunchedEffect(key1 = homeUiState.isLoggedOut) {
+        if(homeUiState.isLoggedOut){
+            onSuccessLogout()
+            homeViewModel.resetLogoutState()
+        }
 
     }
+
     Scaffold(
         topBar = { TopBar()},
         content = {paddingValues ->
@@ -75,7 +72,9 @@ fun HomeScreen(
                     LazyRow(){
 
                         items(homeUiState.users){user->
-                            StoryListItem(user= user)
+                            StoryListItem(
+                                user= user,
+                                onUserClicked = onUserClicked)
                         }
                     }
 
@@ -107,10 +106,8 @@ fun HomeScreen(
             }
         },
         floatingActionButton = { FloatingActionBar(onClick = {
-           logoutViewModel.onEvent(LogoutUiEvent.Logout)
-            if (logoutUiState.success!=null) {
-                onSuccessLogout()
-            }
+           homeViewModel.logout()
+
         })}
 
     )
