@@ -63,10 +63,17 @@ fun HomeScreen(
         topBar = { TopBar()},
         content = {paddingValues ->
             Column(
-                modifier = modifier.padding(paddingValues)
+                modifier = modifier.padding(paddingValues).fillMaxWidth()
             ){
                 AnimatedVisibility(visible = homeUiState.isLoading) {
-                    CircularProgressIndicator()
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ){
+                        CircularProgressIndicator()
+
+
+                    }
                 }
                 AnimatedVisibility(visible = homeUiState.users.isNotEmpty()) {
                     LazyRow(){

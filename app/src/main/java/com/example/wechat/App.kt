@@ -3,6 +3,7 @@ package com.example.wechat
 import android.app.Application
 import com.example.wechat.di.appModule
 import com.example.wechat.features.auth.di.authModule
+import com.example.wechat.features.chat.di.chatModule
 import com.example.wechat.features.home.di.homeModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -16,7 +17,8 @@ class App: Application(){
                 listOf(
                     appModule,
                     authModule,
-                    homeModule
+                    homeModule,
+                    chatModule
                 )
             )
         }
