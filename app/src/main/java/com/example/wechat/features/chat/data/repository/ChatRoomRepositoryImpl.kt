@@ -57,7 +57,6 @@ class ChatRoomRepositoryImpl(
 
     override suspend fun fetchChats(senderId:String,receiverId: String): Flow<Result<List<Message>>> {
         return callbackFlow {
-            try {
                 trySend(Result.Loading)
                 val currentUser = firebaseAuth.currentUser
                 if(currentUser == null){
@@ -87,21 +86,11 @@ class ChatRoomRepositoryImpl(
                                 trySend(Result.Success(chatMessages))
 
                             }
-
-
                         }
-                awaitClose{listener.remove()}
+            awaitClose{listener.remove()}
 
-
-
-
-
-
-            }catch (e:Exception){
-                Result.Failure(e.localizedMessage?:"Something went wrong")
-
-            }
         }
+
     }
 }
 
