@@ -14,5 +14,8 @@ data class User(
     @SerialName("email")
     val email:String = "",
     @SerialName("createdAt")
-    val createdAt:String = ""
+    val createdAt:String = "",
+    @SerialName("lastMessage")
+    var lastMessage: String? = null
+
 )

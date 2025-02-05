@@ -94,7 +94,7 @@ class ChatRoomRepositoryImpl(
     }
 }
 
-private fun getChatRoomId(senderId:String,receiverId:String):String{
+fun getChatRoomId(senderId:String,receiverId:String):String{
     return if(senderId<receiverId){
         "$senderId-$receiverId"
     }else{

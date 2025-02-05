@@ -21,6 +21,35 @@ class HomeViewModel(
 
     init {
         fetchUsers()
+        fetchUsersWithChats()
+    }
+
+    fun fetchUsersWithChats(){
+        _homeUiState.update {
+            it.copy(isLoading = true, error = null, success = null)
+        }
+        viewModelScope.launch {
+            homeRepository.getAllUsersWithActiveChats().collectLatest {
+                result->
+                when(result){
+                    is Result.Failure -> {
+                        _homeUiState.update {
+                            it.copy(isLoading = false, error = result.message)
+                        }
+                    }
+                    Result.Loading -> {
+                        _homeUiState.update {
+                            it.copy(isLoading = true)
+                        }
+                    }
+                    is Result.Success -> {
+                        _homeUiState.update {
+                            it.copy(isLoading = false, success = "Successful fetch", users = result.data)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     fun fetchUsers(){

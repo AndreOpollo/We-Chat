@@ -2,6 +2,7 @@ package com.example.wechat.features.home.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,23 +26,29 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
+import com.example.wechat.features.auth.data.models.User
+import com.example.wechat.features.chat.data.model.Message
 import com.example.wechat.features.home.presentation.util.Story
 import com.example.wechat.ui.theme.DMSansMedium
 import com.example.wechat.ui.theme.DMSansRegular
+import com.google.android.play.integrity.internal.n
 
 @Composable
 fun ChatListItem(
     modifier: Modifier = Modifier,
-    story: Story){
+    user: User,
+    onUserClicked:(User)->Unit
+){
     val imageState = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
-            .data(story.profile)
+            .data(user.photoUrl)
             .size(Size.ORIGINAL)
             .build()).state
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 12.dp),
+            .padding(vertical = 12.dp)
+            .clickable { onUserClicked(user) },
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
 
@@ -80,10 +87,10 @@ fun ChatListItem(
 
          }
             Column(){
-                Text(text = story.name,
+                Text(text = user.username,
                     fontFamily = DMSansMedium,
                     fontSize = 15.sp)
-                Text(text = story.message!!,
+                Text(text = if(user.lastMessage!= null) user.lastMessage!! else "Start new chat",
                     fontFamily = DMSansRegular,
                     fontSize = 13.sp,
                     color = Color.Gray)

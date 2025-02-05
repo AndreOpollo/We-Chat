@@ -106,8 +106,8 @@ fun HomeScreen(
                 LazyColumn(
                     modifier = Modifier.padding(end = 3.dp)
                 ){
-                    items(chatList){chat->
-                        ChatListItem(story = chat)
+                    items(homeUiState.users){user->
+                        ChatListItem(user = user, onUserClicked = onUserClicked)
                     }
                 }
             }
