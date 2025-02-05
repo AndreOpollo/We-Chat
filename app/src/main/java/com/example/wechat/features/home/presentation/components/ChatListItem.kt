@@ -98,7 +98,7 @@ fun ChatListItem(
 
         }
 
-        Text("02:11",
+        Text(if(user.lastMessageTimeStamp!= null) user.lastMessageTimeStamp!! else "00:00",
             fontFamily = DMSansRegular,
             fontSize = 12.sp,
             color = Color.Gray)

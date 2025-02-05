@@ -11,6 +11,9 @@ import com.google.firebase.firestore.toObjects
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HomeRepositoryImpl(
     private val firebaseFirestore: FirebaseFirestore,
@@ -51,8 +54,19 @@ class HomeRepositoryImpl(
                         .get()
                         .await()
                     val lastMessage = lastMessageSnapshot.documents.firstOrNull()?.getString("text")
+                    val lastMessageTimestamp = lastMessageSnapshot
+                        .documents
+                        .firstOrNull()?.getString("createdAt")
+                    val formatTimeStamp = if(lastMessageTimestamp!=null)
+                        formatTimeStamp(lastMessageTimestamp) else
+                            "00:00"
+
+
+
+
                     user.copy(
-                        lastMessage = lastMessage
+                        lastMessage = lastMessage,
+                        lastMessageTimeStamp = formatTimeStamp
                     )
 
                 }
@@ -62,5 +76,11 @@ class HomeRepositoryImpl(
                 emit(Result.Failure(e.localizedMessage?:"Failed to fetch active chats"))
             }
         }
+    }
+
+    private fun formatTimeStamp(timeStamp:String):String{
+        val date = Date(timeStamp.toLong())
+        val format = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        return format.format(date)
     }
 }
